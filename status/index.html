@@ -9,6 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
+            background-color: #0e1116;
         }
         #status {
             font-size: 24px;
@@ -20,6 +21,9 @@
         }
         .offline {
             color: red;
+        }
+        h1{
+            color: white;
         }
     </style>
 </head>
@@ -48,7 +52,7 @@
             }
         }
 
-        setInterval(checkStatus, 5000);
+        setInterval(checkStatus, 1000);
         checkStatus();
     </script>
 </body>
