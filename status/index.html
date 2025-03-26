@@ -64,6 +64,8 @@
                     let responseTimeFormatted;
                     if (responseTime > 4999) {
                         responseTimeFormatted = "Timed out";
+                    } else if (responseTime === "unknown") {
+                        responseTimeFormatted = "Timed out";
                     } else {
                         responseTimeFormatted = responseTime + " ms";
                     }
