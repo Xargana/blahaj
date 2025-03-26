@@ -60,15 +60,21 @@
                 
                 for (const [server, info] of Object.entries(data)) {
                     const row = document.createElement("tr");
+                    const responseTime = info.responseTime;
+                    let responseTimeFormatted;
+                    if (responseTime > 4999) {
+                        responseTimeFormatted = "Timed out";
+                    } else {
+                        responseTimeFormatted = responseTime + " ms";
+                    }
                     row.innerHTML = `
                         <td>${server}</td>
                         <td class="${info.online ? 'online' : 'offline'}">${info.online ? 'Online' : 'Offline'}</td>
                         <td>${new Date(info.lastChecked).toLocaleString()}</td>
-                        <td>${info.responseTime} ms</td>
+                        <td>${responseTimeFormatted}</td>
                     `;
                     tableBody.appendChild(row);
-                }
-            } catch (error) {
+                }            } catch (error) {
                 document.getElementById("status-table").innerHTML = "<tr><td colspan='4'>Error fetching status</td></tr>";
             }
         }
