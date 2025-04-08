@@ -5,9 +5,10 @@
     --accent-color: #FF6B5D;
     --text-color: #ffffff;
     --light-text: #cccccc;
-    --bg-color: #000000;
-    --light-bg: #1a1a1a;
+    --bg-color: #262e3c;
+    --light-bg: #262e3c;
     --border-color: #333333;
+    --footer-color: #3f4b62;
   }
   
   * {
@@ -42,7 +43,6 @@
   /* Header and Navigation */
   header {
     background-color: var(--bg-color);
-    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -118,7 +118,7 @@
   }
   
   .footer-bottom {
-    background-color: var(--primary-color);
+    background-color: var(--footer-color);
     color: white;
     text-align: center;
     padding: 1rem 0;
