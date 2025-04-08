@@ -352,13 +352,18 @@
             });
         });
 
-        function formatUptime(seconds) {
-            if (!seconds) return 'N/A';
+        function formatUptime(milliseconds) {
+            if (!milliseconds) return 'N/A';
             
+            // Convert milliseconds to seconds
+            const seconds = Math.floor(milliseconds / 1000);
+            
+            // Calculate days, hours, minutes
             const days = Math.floor(seconds / 86400);
             const hours = Math.floor((seconds % 86400) / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
             
+            // Format the output
             let result = '';
             if (days > 0) result += `${days}d `;
             if (hours > 0 || days > 0) result += `${hours}h `;
@@ -366,6 +371,7 @@
             
             return result;
         }
+
 
         function formatMemory(bytes) {
             if (!bytes) return 'N/A';
