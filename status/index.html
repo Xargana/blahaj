@@ -418,6 +418,46 @@
 
         async function checkStatus() {
             try {
+                // Check local server health endpoint first
+                try {
+                    const healthResponse = await fetch('https://blahaj.tr:2589/status/health');
+                    if (healthResponse.status !== 200) {
+                        document.getElementById("local-server-table").innerHTML = `
+                            <div class="error-message">
+                                <p>Status API is down, try again later</p>
+                            </div>
+                        `;
+                        document.getElementById("remote-servers-table").innerHTML = `
+                            <div class="error-message">
+                                <p>Status API is down, try again later</p>
+                            </div>
+                        `;
+                        document.getElementById("services-table").innerHTML = `
+                            <div class="error-message">
+                                <p>Status API is down, try again later</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                } catch (error) {
+                    document.getElementById("local-server-table").innerHTML = `
+                        <div class="error-message">
+                            <p>Status API is down, try again later</p>
+                        </div>
+                    `;
+                    document.getElementById("remote-servers-table").innerHTML = `
+                        <div class="error-message">
+                            <p>Status API is down, try again later</p>
+                        </div>
+                    `;
+                    document.getElementById("services-table").innerHTML = `
+                        <div class="error-message">
+                            <p>Status API is down, try again later</p>
+                        </div>
+                    `;
+                    return;
+                }
+
                 const response = await fetch(API_URL, { mode: "cors" });
                 const data = await response.json();
                 
