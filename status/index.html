@@ -3,49 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Status</title>
+    <title>Blahaj Server Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #0e1116;
+            --card-bg: #1a1d23;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --border-color: #2c3038;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
             text-align: center;
-            margin: 50px;
-            background-color: #0e1116;
-            color: white;
+            margin-bottom: 2.5rem;
         }
-        table {
-            width: 80%;
-            margin: auto;
-            border-collapse: collapse;
-            background: #1a1d23;
-            color: white;
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-color), #9b59b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #444;
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
+
+        .status-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .status-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
+            padding: 1.2rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .status-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .status-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .status-row:last-child {
+            border-bottom: none;
+        }
+
+        .status-row:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .server-name {
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .online .status-dot {
+            background-color: var(--success-color);
+            box-shadow: 0 0 8px var(--success-color);
+        }
+
+        .offline .status-dot {
+            background-color: var(--danger-color);
+            box-shadow: 0 0 8px var(--danger-color);
+        }
+
         .online {
-            color: green;
+            color: var(--success-color);
         }
+
         .offline {
-            color: red;
+            color: var(--danger-color);
+        }
+
+        .response-time {
+            font-family: 'Inter', monospace;
+            font-weight: 500;
+        }
+
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--danger-color);
+        }
+
+        .refresh-info {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .status-header, .status-row {
+                grid-template-columns: 1.5fr 1fr 1.5fr;
+            }
+
+            .status-header div:nth-child(3), .status-row div:nth-child(3) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .status-header, .status-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .status-header div:nth-child(4), .status-row div:nth-child(4) {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Server Status</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Server</th>
-                <th>Status</th>
-                <th>Last Checked</th>
-                <th>Response Time (ms)</th>
-            </tr>
-        </thead>
-        <tbody id="status-table">
-            <tr><td colspan="4">Loading...</td></tr>
-        </tbody>
-    </table>
+    <header>
+        <h1>Server Status</h1>
+        <p class="subtitle">Real-time monitoring of our services</p>
+    </header>
+
+    <div class="status-container">
+        <div class="status-header">
+            <div>Server</div>
+            <div>Status</div>
+            <div>Last Checked</div>
+            <div>Response Time</div>
+        </div>
+        <div class="status-body" id="status-table">
+            <div class="loading">
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        .spinner {
+                            transform-origin: center;
+                            animation: spin 1s linear infinite;
+                        }
+                        @keyframes spin {
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                    <circle class="spinner" cx="12" cy="12" r="10" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="30 50" />
+                </svg>
+                <p>Loading server status...</p>
+            </div>
+        </div>
+    </div>
+
+    <p class="refresh-info">Status updates automatically every 5 seconds</p>
 
     <script>
         const API_URL = "https://blahaj.tr:2589/status";
@@ -55,29 +224,46 @@
                 const response = await fetch(API_URL, { mode: "cors" });
                 const data = await response.json();
                 
-                const tableBody = document.getElementById("status-table");
-                tableBody.innerHTML = ""; 
+                const statusBody = document.getElementById("status-table");
+                statusBody.innerHTML = ""; 
                 
                 for (const [server, info] of Object.entries(data)) {
-                    const row = document.createElement("tr");
+                    const row = document.createElement("div");
+                    row.className = "status-row";
+                    
                     const responseTime = info.responseTime;
                     let responseTimeFormatted;
-                    if (responseTime > 4999) {
-                        responseTimeFormatted = "Timed out";
-                    } else if (responseTime === "unknown") {
+                    if (responseTime > 4999 || responseTime === "unknown") {
                         responseTimeFormatted = "Timed out";
                     } else {
                         responseTimeFormatted = responseTime + " ms";
                     }
+                    
+                    const statusClass = info.online ? 'online' : 'offline';
+                    const statusText = info.online ? 'Online' : 'Offline';
+                    
+                    const lastCheckedDate = new Date(info.lastChecked);
+                    const formattedDate = lastCheckedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    
                     row.innerHTML = `
-                        <td>${server}</td>
-                        <td class="${info.online ? 'online' : 'offline'}">${info.online ? 'Online' : 'Offline'}</td>
-                        <td>${new Date(info.lastChecked).toLocaleString()}</td>
-                        <td>${responseTimeFormatted}</td>
+                        <div class="server-name">${server}</div>
+                        <div class="status-indicator ${statusClass}">
+                            <span class="status-dot"></span>
+                            <span>${statusText}</span>
+                        </div>
+                        <div class="timestamp">${formattedDate}</div>
+                        <div class="response-time">${responseTimeFormatted}</div>
                     `;
-                    tableBody.appendChild(row);
-                }            } catch (error) {
-                document.getElementById("status-table").innerHTML = "<tr><td colspan='4'>Error fetching status</td></tr>";
+                    
+                    statusBody.appendChild(row);
+                }
+            } catch (error) {
+                document.getElementById("status-table").innerHTML = `
+                    <div class="error-message">
+                        <p>Error fetching server status</p>
+                        <p>Please try again later</p>
+                    </div>
+                `;
             }
         }
         
