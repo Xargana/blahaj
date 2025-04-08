@@ -61,6 +61,15 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            padding: 1rem 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .status-header {
@@ -73,7 +82,7 @@
         }
 
         .status-body {
-            max-height: 70vh;
+            max-height: 50vh;
             overflow-y: auto;
         }
 
@@ -157,6 +166,51 @@
             font-size: 0.9rem;
         }
 
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .memory-usage {
+            font-family: 'Inter', monospace;
+            font-size: 0.9rem;
+        }
+
+        .uptime {
+            font-size: 0.9rem;
+        }
+
+        .local-server {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
@@ -188,28 +242,94 @@
         <p class="subtitle">Real-time monitoring of our services</p>
     </header>
 
-    <div class="status-container">
-        <div class="status-header">
-            <div>Server</div>
-            <div>Status</div>
-            <div>Last Checked</div>
-            <div>Response Time</div>
+    <div class="tabs">
+        <div class="tab active" data-tab="servers">Servers</div>
+        <div class="tab" data-tab="services">PM2 Services</div>
+    </div>
+
+    <div id="servers-tab" class="tab-content active">
+        <!-- Local Server Section -->
+        <div class="status-container">
+            <div class="section-title">Local Server</div>
+            <div class="status-header">
+                <div>Name</div>
+                <div>Status</div>
+                <div>Last Checked</div>
+                <div>Response Time</div>
+            </div>
+            <div class="status-body" id="local-server-table">
+                <div class="loading">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .spinner {
+                                transform-origin: center;
+                                animation: spin 1s linear infinite;
+                            }
+                            @keyframes spin {
+                                100% { transform: rotate(360deg); }
+                            }
+                        </style>
+                        <circle class="spinner" cx="12" cy="12" r="10" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="30 50" />
+                    </svg>
+                    <p>Loading local server status...</p>
+                </div>
+            </div>
         </div>
-        <div class="status-body" id="status-table">
-            <div class="loading">
-                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <style>
-                        .spinner {
-                            transform-origin: center;
-                            animation: spin 1s linear infinite;
-                        }
-                        @keyframes spin {
-                            100% { transform: rotate(360deg); }
-                        }
-                    </style>
-                    <circle class="spinner" cx="12" cy="12" r="10" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="30 50" />
-                </svg>
-                <p>Loading server status...</p>
+        
+        <!-- Remote Servers Section -->
+        <div class="status-container">
+            <div class="section-title">Remote Servers</div>
+            <div class="status-header">
+                <div>Name</div>
+                <div>Status</div>
+                <div>Last Checked</div>
+                <div>Response Time</div>
+            </div>
+            <div class="status-body" id="remote-servers-table">
+                <div class="loading">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .spinner {
+                                transform-origin: center;
+                                animation: spin 1s linear infinite;
+                            }
+                            @keyframes spin {
+                                100% { transform: rotate(360deg); }
+                            }
+                        </style>
+                        <circle class="spinner" cx="12" cy="12" r="10" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="30 50" />
+                    </svg>
+                    <p>Loading remote servers status...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="services-tab" class="tab-content">
+        <div class="status-container">
+            <div class="section-title">PM2 Services</div>
+            <div class="status-header">
+                <div>Name</div>
+                <div>Status</div>
+                <div>Uptime</div>
+                <div>Memory</div>
+            </div>
+            <div class="status-body" id="services-table">
+                <div class="loading">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .spinner {
+                                transform-origin: center;
+                                animation: spin 1s linear infinite;
+                            }
+                            @keyframes spin {
+                                100% { transform: rotate(360deg); }
+                            }
+                        </style>
+                        <circle class="spinner" cx="12" cy="12" r="10" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="30 50" />
+                    </svg>
+                    <p>Loading PM2 services status...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -219,48 +339,180 @@
     <script>
         const API_URL = "https://blahaj.tr:2589/status";
 
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and tab contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+
+        function formatUptime(seconds) {
+            if (!seconds) return 'N/A';
+            
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            
+            let result = '';
+            if (days > 0) result += `${days}d `;
+            if (hours > 0 || days > 0) result += `${hours}h `;
+            result += `${minutes}m`;
+            
+            return result;
+        }
+
+        function formatMemory(bytes) {
+            if (!bytes) return 'N/A';
+            
+            const mb = bytes / (1024 * 1024);
+            return `${mb.toFixed(1)} MB`;
+        }
+
+        function createServerRow(server, info) {
+            const row = document.createElement("div");
+            row.className = "status-row";
+            
+            // Add local-server class if this is the local server
+            if (server === "blahaj.tr") {
+                row.classList.add("local-server");
+            }
+            
+            const responseTime = info.responseTime;
+            let responseTimeFormatted;
+            if (responseTime > 4999 || responseTime === "unknown" || responseTime === null) {
+                responseTimeFormatted = "Timed out";
+            } else {
+                responseTimeFormatted = responseTime + " ms";
+            }
+            
+            const statusClass = info.online ? 'online' : 'offline';
+            const statusText = info.online ? 'Online' : 'Offline';
+            
+            const lastCheckedDate = new Date(info.lastChecked);
+            const formattedDate = lastCheckedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            row.innerHTML = `
+                <div class="server-name">${server}</div>
+                <div class="status-indicator ${statusClass}">
+                    <span class="status-dot"></span>
+                    <span>${statusText}</span>
+                </div>
+                <div class="timestamp">${formattedDate}</div>
+                <div class="response-time">${responseTimeFormatted}</div>
+            `;
+            
+            return row;
+        }
+
         async function checkStatus() {
             try {
                 const response = await fetch(API_URL, { mode: "cors" });
                 const data = await response.json();
                 
-                const statusBody = document.getElementById("status-table");
-                statusBody.innerHTML = ""; 
+                // Handle server status
+                const serversData = data.servers || data; // Support both new and old API format
                 
-                for (const [server, info] of Object.entries(data)) {
-                    const row = document.createElement("div");
-                    row.className = "status-row";
+                // Clear previous content
+                const localServerTable = document.getElementById("local-server-table");
+                const remoteServersTable = document.getElementById("remote-servers-table");
+                localServerTable.innerHTML = "";
+                remoteServersTable.innerHTML = "";
+                
+                // Process each server
+                for (const [server, info] of Object.entries(serversData)) {
+                    const row = createServerRow(server, info);
                     
-                    const responseTime = info.responseTime;
-                    let responseTimeFormatted;
-                    if (responseTime > 4999 || responseTime === "unknown") {
-                        responseTimeFormatted = "Timed out";
+                    // Add to appropriate table
+                    if (server === "blahaj.tr") {
+                        localServerTable.appendChild(row);
                     } else {
-                        responseTimeFormatted = responseTime + " ms";
+                        remoteServersTable.appendChild(row);
                     }
-                    
-                    const statusClass = info.online ? 'online' : 'offline';
-                    const statusText = info.online ? 'Online' : 'Offline';
-                    
-                    const lastCheckedDate = new Date(info.lastChecked);
-                    const formattedDate = lastCheckedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                    
-                    row.innerHTML = `
-                        <div class="server-name">${server}</div>
-                        <div class="status-indicator ${statusClass}">
-                            <span class="status-dot"></span>
-                            <span>${statusText}</span>
+                }
+                
+                // Show message if no local server found
+                if (localServerTable.children.length === 0) {
+                    localServerTable.innerHTML = `
+                        <div class="error-message">
+                            <p>Local server status not available</p>
                         </div>
-                        <div class="timestamp">${formattedDate}</div>
-                        <div class="response-time">${responseTimeFormatted}</div>
                     `;
+                }
+                
+                // Show message if no remote servers found
+                if (remoteServersTable.children.length === 0) {
+                    remoteServersTable.innerHTML = `
+                        <div class="error-message">
+                            <p>No remote servers configured</p>
+                        </div>
+                    `;
+                }
+                
+                // Handle PM2 services status if available
+                if (data.pm2Services) {
+                    const servicesBody = document.getElementById("services-table");
+                    servicesBody.innerHTML = "";
                     
-                    statusBody.appendChild(row);
+                    if (Object.keys(data.pm2Services).length === 0) {
+                        servicesBody.innerHTML = `
+                            <div class="error-message">
+                                <p>No PM2 services found</p>
+                            </div>
+                        `;
+                    } else {
+                        for (const [service, info] of Object.entries(data.pm2Services)) {
+                            const row = document.createElement("div");
+                            row.className = "status-row";
+                            
+                            const statusClass = info.status === 'online' ? 'online' : 'offline';
+                            const statusText = info.status === 'online' ? 'Online' : 'Offline';
+                            
+                            const uptimeFormatted = formatUptime(info.uptime);
+                            const memoryFormatted = formatMemory(info.memory);
+                            
+                            row.innerHTML = `
+                                <div class="server-name">${info.name || service}</div>
+                                <div class="status-indicator ${statusClass}">
+                                    <span class="status-dot"></span>
+                                    <span>${statusText}</span>
+                                </div>
+                                <div class="uptime">${uptimeFormatted}</div>
+                                <div class="memory-usage">${memoryFormatted}</div>
+                            `;
+                            
+                            servicesBody.appendChild(row);
+                        }
+                    }
+                } else {
+                    document.getElementById("services-table").innerHTML = `
+                        <div class="error-message">
+                            <p>PM2 service data not available</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
-                document.getElementById("status-table").innerHTML = `
+                console.error("Error fetching status:", error);
+                document.getElementById("local-server-table").innerHTML = `
                     <div class="error-message">
                         <p>Error fetching server status</p>
+                        <p>Please try again later</p>
+                    </div>
+                `;
+                document.getElementById("remote-servers-table").innerHTML = `
+                    <div class="error-message">
+                        <p>Error fetching server status</p>
+                        <p>Please try again later</p>
+                    </div>
+                `;
+                document.getElementById("services-table").innerHTML = `
+                    <div class="error-message">
+                        <p>Error fetching PM2 services status</p>
                         <p>Please try again later</p>
                     </div>
                 `;
@@ -272,3 +524,4 @@
     </script>
 </body>
 </html>
+
