@@ -1,2 +1,3 @@
 # blahaj
-Server files for blahaj.tr
+
+blahaj.tr
